@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import ErrorNotification from "./components/ErrorNotification";
 import BlogForm from "./components/BlogForm";
-import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from 'react-redux'
 import { setBlogs } from './reducers/blogReducer'
 import User from './components/User'
@@ -14,12 +12,13 @@ import styled from 'styled-components'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs'
 import Logout from './components/Logout'
-
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route
 } from "react-router-dom"
 
 
@@ -28,16 +27,7 @@ const Page = styled.div`
   background: papayawhip;
 `
 
-const Navigation = styled.div`
-  background: BurlyWood;
-  padding: 1em;
-`
 
-const Footer = styled.div`
-  background: Chocolate;
-  padding: 1em;
-  margin-top: 1em;
-`
 
 const App = () => {
  /* const [blogs, setBlogs] = useState([]); */
@@ -117,72 +107,13 @@ const App = () => {
   };
 
   const handleLogout = () => {
+    setUser(null)
     window.localStorage.removeItem("loggedBlogappUser");
+    window.location.href("https://infinite-atoll-62336.herokuapp.com/");
   };
 
 
-  const padding = {
-    padding: 5
-  }
-  /* const createBlog = async () => {
-    try {
-      const blogObject = {
-        author: newAuthor,
-        title: newTitle,
-        url: newUrl,
-        likes: 0,
-      };
-
-      await blogService.create(blogObject);
-      setBlogs(blogs.concat(blogObject));
-      setNewTitle("");
-      setNewAuthor("");
-      setNewUrl("");
-      setErrorMessage(`${blogObject.title} has been added!`);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
-    } catch (exception) {
-      setErrorMessage(`blog couldn't be added`);
-    }
-  };
- */
- /* const handleLike = (id) => {
-    const blog = blogs.find((b) => b.id === id);
-    const changedBlog = { ...blog, likes: blog.likes + 1 };
-
-    blogService
-      .update(id, changedBlog)
-      .then((returnedBlog) => {
-        setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
-      })
-      .catch((error) => {
-        alert(`the blog '${blog.content} was already deleted from the server`);
-        setBlogs(blogs.filter((b) => b.id !== id));
-      });
-  }; */
-
-/*  const handleDelete = (id) => {
-    const blog = blogs.find((b) => b.id === id);
-
-    if (window.confirm(`are you sure you want to remove ${blog.title}`)) {
-      blogService
-        .remove(id)
-        .then(setBlogs(blogs.filter((b) => b.id !== id)))
-        .catch((error) => {
-          alert(`${error}`);
-        });
-    } else {
-      alert("deletion cancelled");
-    }
-  };
- */
-
-  
-  /* const arrayforSort = [...blogs] */
-
-
-  if (!blogs) {
+   if (!blogs) {
     return null
   }
  
@@ -195,24 +126,10 @@ const App = () => {
   return (
   
     <Router>
+      <div>
+        <Header />
         <Page>
-      <Navigation>
-       <div>
 
-         <Link style={padding} to="/">home</Link>
-    
-       
-                <Link style={padding} to="/blogform">blogform</Link>
-                <Link style={padding} to="/users">Users</Link>
-       
-      
-        <Link style={padding} to="/logout">Logout</Link>
-        
-         
-   
-
-      </div>
-</Navigation>
       <Routes>
         <Route path="/blogform" element={<BlogForm  newAuthor={newAuthor}
           newTitle={newTitle}
@@ -221,9 +138,10 @@ const App = () => {
           handleUrlChange={handleUrlChange}
           handleTitleChange={handleTitleChange}
           setErrorMessage={setErrorMessage}
+          errorMessage={errorMessage}
           blogs={blogs}/>} />
         <Route path="/logout" element={<div>
-          <p>{user.name} logged-in</p>
+          <p className="px-2 py-2">{user.name} logged-in</p>
           <Logout handleLogout={handleLogout} />
         </div>} />
         <Route path="/" element={<div><Notification message={errorMessage} />
@@ -236,18 +154,6 @@ const App = () => {
 
 
     
-      <Togglable buttonLabel="new blog">
-        <BlogForm
-          newAuthor={newAuthor}
-          newTitle={newTitle}
-          newUrl={newUrl}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
-          handleTitleChange={handleTitleChange}
-          setErrorMessage={setErrorMessage}
-          blogs={blogs}
-        />
-      </Togglable>
 
       <div>
         
@@ -255,6 +161,9 @@ const App = () => {
         
     </div>
     </Page>
+ 
+    </div>
+    <Footer />
     </Router>
   );
       } else {

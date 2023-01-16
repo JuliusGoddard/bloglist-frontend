@@ -1,8 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { newLike, deleteBlog, setBlogs } from '../reducers/blogReducer'
-import SingleBlog from '../components/SingleBlog'
+import { useDispatch } from 'react-redux'
+import {  setBlogs } from '../reducers/blogReducer'
 import {
-  Container,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +13,7 @@ import {
 const Blog = ({ blog, handleLike, handleDelete }) => {
   const dispatch = useDispatch()
 
-  const blogs = useSelector(state => state)
+ 
 
    const blogStyle = {
     paddingTop: 10,
@@ -25,13 +23,6 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
     marginBottom: 5,
   };
 
-  const voteLike = (id) => {
-    dispatch(newLike(id))
-  }
-
- const removeBlog = (id) => {
-    dispatch(deleteBlog(id))
-  } 
 
   const handleClick = (blog) => {
     dispatch(setBlogs([blog]))
@@ -51,8 +42,8 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
       <Table>
         <TableBody>
           <TableRow>
-     <TableCell>{blog.title} {blog.author}{" "}
-<button onClick={() => handleClick(blog)}>view</button></TableCell>
+     <TableCell><strong>Title:</strong> {blog.title} <br /><strong>Author:</strong> {blog.author}<br />{" "}
+<button className="bg-orange-500 hover:bg-blue-700 text-white font-bold my-2 py-2 px-4 rounded-full" onClick={() => handleClick(blog)}>view details and comments</button></TableCell>
 </TableRow>
 </TableBody>
 </Table>
